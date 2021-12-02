@@ -54,10 +54,12 @@ class ContentAttributeValidator < ActiveModel::Validator
   end
 
   def validate_cc_emails!(record)
-    record.errors.add(:content_attributes, 'contains invalid cc_emails') if record.cc_emails&.grep_v(URI::MailTo::EMAIL_REGEXP).present?
+    cc_emails = record.cc_emails.instance_of?(String) ? [record.cc_emails] : record.cc_emails
+    record.errors.add(:content_attributes, 'contains invalid cc_emails') if cc_emails&.grep_v(URI::MailTo::EMAIL_REGEXP).present?
   end
 
   def validate_bcc_emails!(record)
-    record.errors.add(:content_attributes, 'contains invalid bcc_emails') if record.bcc_emails&.grep_v(URI::MailTo::EMAIL_REGEXP).present?
+    bcc_emails = record.bcc_emails.instance_of?(String) ? [record.bcc_emails] : record.bcc_emails
+    record.errors.add(:content_attributes, 'contains invalid bcc_emails') if bcc_emails&.grep_v(URI::MailTo::EMAIL_REGEXP).present?
   end
 end
